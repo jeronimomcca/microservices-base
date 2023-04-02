@@ -1,0 +1,5 @@
+This should have a dynamic way to load data from the web API and mount generic views
+1. Request the main configurations (cofigured menu, configured data sources, configured views)
+2. Open the main view wraped on the home view, which may provide menus, router, header and docker
+3. All other views inherit from the base view 
+3. Set the main bahavior

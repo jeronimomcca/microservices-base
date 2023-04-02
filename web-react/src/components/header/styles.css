@@ -1,0 +1,21 @@
+
+  .Header {
+    background-color:#0a0909;
+    height: 8vh;
+    display: flex;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .Header-full {
+    width: 100%;
+    vertical-align: middle;
+    border-bottom: 1px solid white;
+  }
+  
+  .Header-menu {
+    width: 5%;
+    margin-left: 2%;
+
+  }
+

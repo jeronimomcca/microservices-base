@@ -1,0 +1,1 @@
+This should provide a secure REST web API to connect to database and expose data in a json format

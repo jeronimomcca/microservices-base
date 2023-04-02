@@ -1,0 +1,10 @@
+
+.Base-content {
+  background-color: #adb8cc;
+  height: 84vh;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  overflow: auto; 
+}

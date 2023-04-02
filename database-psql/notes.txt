@@ -1,0 +1,1 @@
+This should basically watch if postgres is running and provide clustering options in case of fail on one server instance

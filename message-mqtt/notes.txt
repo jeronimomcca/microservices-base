@@ -1,0 +1,3 @@
+This is responsible for:
+1. Connect to mosquitto or any mqtt and loads data from topics and persist it to the database server
+2. In case of event data, this should trigger or flag something in a way others get notified about it

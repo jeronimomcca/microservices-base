@@ -1,0 +1,33 @@
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table th,
+.table td {
+  border: 1px solid #c9c5c5;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  background-color: #0a0909;
+  color: white;
+  z-index: 1;
+}
+
+.table tr:nth-child(even) {
+  background-color: rgb(53, 49, 49);
+}
+
+.table tr:nth-child(odd) {
+  background-color: #ffffff;
+  color: #0a0909;
+}
+
+.table tr:hover {
+  background-color: #ddd;
+}
