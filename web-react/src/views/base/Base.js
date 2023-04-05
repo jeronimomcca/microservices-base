@@ -10,6 +10,7 @@ function Base(props) {
   const viewFetchUri = view.get;
   const viewUpdate = view.update;
   const viewDelete = view.delete;
+  const appProps = props.appProps;
 
   let query = view.query
   let [viewData, setViewData] = useState(undefined)
@@ -31,6 +32,8 @@ function Base(props) {
 
   useEffect(() => {
     setViewData(request)
+    if(request && request[0])
+      props.onChangeAppProps({...appProps, currentViewProps: Object.keys(request[0])})
   }, [request])
 
   let currentScreen = viewData ?

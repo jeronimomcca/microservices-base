@@ -18,7 +18,7 @@ function App(props) {
 
   let currentScreen = currentViewObj ?
     <div className="Wrapper">
-      <Base view={currentViewObj} />
+      <Base appProps={appProps} onChangeAppProps={props.onChangeAppProps} view={currentViewObj} />
     </div> :
     "Loading..."
   return currentScreen;
