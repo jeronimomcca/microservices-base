@@ -4,13 +4,14 @@ import Header from '../../components/header';
 import Footer from '../../components/footer';
 import Wrapper from '../../components/wrapper'
 import React, { useEffect, useState } from 'react';
+import {CONFIG_URL} from '../../settings'
 
 let AppProps = {
   "currentView": undefined
 }
 
 function Home() {
-  const CONFIG_URL = '/web-app/configuration';
+  
 
   let [configuration, setConfiguration] = useState(undefined)
 

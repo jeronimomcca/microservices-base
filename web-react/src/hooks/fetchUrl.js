@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
+import {BASE_API_ROUTE} from '../settings'
 
 function App(props) {
 
   const [configuration, setConfiguration] = useState(null);
 
-  const BASE_DOMAIN = "http://localhost:10000"
   useEffect(() => {
-    fetch( BASE_DOMAIN + props.uri)
+    fetch( BASE_API_ROUTE + props.uri)
       .then(response => response.json())
       .then(data => setConfiguration(data))
       .catch(error => setConfiguration(error));

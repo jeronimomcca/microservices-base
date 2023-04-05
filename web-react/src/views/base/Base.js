@@ -2,6 +2,7 @@ import './Base.css';
 import fetchUrl from '../../hooks/fetchUrl';
 import { useEffect, useState } from 'react';
 import Table from '../../components/dataTable'
+import {BASE_API_ROUTE} from '../../settings'
 
 function Base(props) {
 
@@ -9,8 +10,6 @@ function Base(props) {
   const viewFetchUri = view.get;
   const viewUpdate = view.update;
   const viewDelete = view.delete;
-
-  const domainUrl = 'http://localhost:10000';
 
   let query = view.query
   let [viewData, setViewData] = useState(undefined)
@@ -22,11 +21,11 @@ function Base(props) {
 
     if (operation === "update") {
       console.log(`updating ${JSON.stringify(targetObj)}`)
-      fetch(`${domainUrl}${viewUpdate}${encodeURIComponent(JSON.stringify(targetObj))}`)
+      fetch(`${BASE_API_ROUTE}${viewUpdate}${encodeURIComponent(JSON.stringify(targetObj))}`)
     }
     else if (operation === "delete") {
       console.log(`deleting ${JSON.stringify(targetObj)}`)
-      fetch(`${domainUrl}${viewDelete}${encodeURIComponent(JSON.stringify(targetObj))}`)
+      fetch(`${BASE_API_ROUTE}${viewDelete}${encodeURIComponent(JSON.stringify(targetObj))}`)
     }
   }
 
