@@ -243,21 +243,17 @@ def create_query_result(query):
     keys = []
     values = []
     for key, value in json_obj.items():
-        if key != "object":
-            keys.append(key)
-            if isinstance(value, list):
-                values.append("{" + ",".join(escape_sql_value(v) for v in value) + "}")
-            else:
-                values.append(escape_sql_value(value))
+        keys.append("\"{}\"".format(key))
+        values.append(escape_sql_value(value))
     query = f"INSERT INTO {object_name} ({','.join(keys)}) VALUES ({','.join(values)})"
 
-    print(query)
-    return query
-    # # Execute the SQL statement
-    # cursor.execute(query)
+    # Execute the SQL statement
+    cursor.execute(query)
 
-    # # Commit the transaction and close the connection
-    # connection.commit()
+    # Commit the transaction and close the connection
+    connection.commit()
+
+    return query
 
 
 @app.route("/createantigo/<entity>", methods=['GET', 'POST'])
