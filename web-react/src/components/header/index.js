@@ -3,9 +3,9 @@ import Menu from '../menu'
 import { BASE_API_ROUTE } from '../../settings'
 import { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 function App(props) {
-
   let configuration = props.configuration;
   let onChangeAppProps = props.onChangeAppProps;
   let appProps = props.appProps;
@@ -51,32 +51,36 @@ function App(props) {
             <td className='Header-view'>
               {currentView}
             </td>
-            <td>
-              <button onClick={handleCreateOpen} >+</button>
+            <td className='Header-menu'>
+              <Button onClick={handleCreateOpen}
+                variant="contained"
+                color="primary"
+                id="green-button"
+                startIcon={<AddIcon />}/>
             </td>
           </tr>
         </tbody>
       </table>
       <Dialog open={createOpen} onClose={handleCreateClose}>
-      <DialogTitle>Create</DialogTitle>
-      <DialogContent>
-        <form>
-          {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
-            <TextField
-              key={appProps.currentViewProps[key]}
-              label={appProps.currentViewProps[key]}
-              value={createObj[val]}
-              onChange={(event) => setCreateObj({ ...createObj, [appProps.currentViewProps[key]]: event.target.value })}
-              fullWidth
-            />
-          ))}
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCreateClose}>Cancel</Button>
-        <Button onClick={callCreateForm} color="primary">Save</Button>
-      </DialogActions>
-    </Dialog>
+        <DialogTitle>Create</DialogTitle>
+        <DialogContent>
+          <form>
+            {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
+              <TextField
+                key={appProps.currentViewProps[key]}
+                label={appProps.currentViewProps[key]}
+                value={createObj[val]}
+                onChange={(event) => setCreateObj({ ...createObj, [appProps.currentViewProps[key]]: event.target.value })}
+                fullWidth
+              />
+            ))}
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCreateClose}>Cancel</Button>
+          <Button onClick={callCreateForm} color="primary">Save</Button>
+        </DialogActions>
+      </Dialog>
     </header>
 
   );

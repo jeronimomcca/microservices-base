@@ -19,3 +19,21 @@
 
   }
 
+  #green-button {
+    background-color: green;
+  color: white;
+    border-radius: 0; /* Remove button border radius */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Add some padding */
+    width: 5%;
+    margin-left: 2%;
+  }
+  
+  #green-button:hover {
+    background-color: #388e3c; /* Darker green background color on hover */
+  }
+  
+  #green-button .MuiButton-label::after {
+    content: "ADD"; /* Add the "+" symbol */
+  }
+  
