@@ -11,11 +11,17 @@ function Base(props) {
   const viewUpdate = view.update;
   const viewDelete = view.delete;
   const appProps = props.appProps;
+  let viewData = appProps.viewData;
+  let setViewData = (data) => {
+    props.onChangeAppProps({ ...appProps, viewData: data });
+  }
 
   let query = view.query
-  let [viewData, setViewData] = useState(undefined)
 
-  let request = fetchUrl({ uri: viewFetchUri + "/" + encodeURIComponent(JSON.stringify(query)) });
+  let request = undefined;
+
+  if (query)
+    request = fetchUrl({ uri: viewFetchUri + "/" + encodeURIComponent(JSON.stringify(query)) });
 
   const changeRecord = (targetObj, operation) => {
     targetObj.object = view.object;
@@ -44,16 +50,17 @@ function Base(props) {
   }
 
   useEffect(() => {
-    setViewData(request)
-    if (request && request[0])
-      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]) })
+    if (request && request[0]) {
+      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]), viewData: request });
+
+    }
   }, [request])
 
   let currentScreen = viewData ?
     <div className="Base-content">
       <Table data={viewData} onChangeData={changeRecord} />
     </div> :
-    "Loading"
+    "Loading base"
   return currentScreen;
 }
 

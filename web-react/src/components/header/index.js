@@ -25,9 +25,14 @@ function App(props) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
       fetch(`${BASE_API_ROUTE}${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
-      .then((data) => data.json())
-      .then(addObj => {
-          console.log(JSON.stringify(addObj))
+        .then((data) => data.json())
+        .then(addObj => {
+          console.log(JSON.stringify(addObj));
+          let aux =  appProps.viewData.slice();
+          console.log(JSON.stringify(aux));
+          onChangeAppProps({ ...appProps, viewData: [...aux, addObj] });
+
+          //onChangeAppProps({ ...appProps, viewData: {...aux.push(addObj)} });
         })
       handleCreateClose();
     }
@@ -59,7 +64,7 @@ function App(props) {
                 variant="contained"
                 color="primary"
                 id="green-button"
-                startIcon={<AddIcon />}/>
+                startIcon={<AddIcon />} />
             </td>
           </tr>
         </tbody>

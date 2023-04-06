@@ -7,7 +7,8 @@ import React, { useEffect, useState } from 'react';
 import {CONFIG_URL} from '../../settings'
 
 let AppProps = {
-  "currentView": undefined
+  "currentView": undefined,
+  "viewData": undefined
 }
 
 function Home() {
@@ -15,9 +16,9 @@ function Home() {
 
   let [configuration, setConfiguration] = useState(undefined)
 
-  let [appProps, setAppProps] = useState(AppProps)
+  const [appProps, setAppProps] = useState(AppProps)
   const changeAppProps = (value) => {
-    setAppProps(value)
+    setAppProps(value);
   }
 
   let requestConfiguration = fetchUrl({ uri: CONFIG_URL });
@@ -29,11 +30,11 @@ function Home() {
     }
     else if (requestConfiguration && !configuration) {
       setConfiguration({ ...requestConfiguration });
-      changeAppProps({ ...appProps, currentView: requestConfiguration.homeView })
+      changeAppProps({ ...appProps, currentView: requestConfiguration.homeView });
     }
   }, [requestConfiguration, configuration, appProps])
 
-  const currentScreen = configuration ?
+  let currentScreen = configuration ?
   <div className="Home">
       <Header appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
       <Wrapper appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
