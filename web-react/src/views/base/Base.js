@@ -2,7 +2,7 @@ import './Base.css';
 import fetchUrl from '../../hooks/fetchUrl';
 import { useEffect, useState } from 'react';
 import Table from '../../components/dataTable'
-import {BASE_API_ROUTE} from '../../settings'
+import { BASE_API_ROUTE } from '../../settings'
 
 function Base(props) {
 
@@ -23,17 +23,30 @@ function Base(props) {
     if (operation === "update") {
       console.log(`updating ${JSON.stringify(targetObj)}`)
       fetch(`${BASE_API_ROUTE}${viewUpdate}${encodeURIComponent(JSON.stringify(targetObj))}`)
+        .then((data) => data.json())
+        .then(updatedObj => {
+          setViewData(viewData.map(obj => {
+            if (obj.id === updatedObj.id) {
+              return updatedObj;
+            }
+            return obj;
+          }))
+        })
     }
     else if (operation === "delete") {
       console.log(`deleting ${JSON.stringify(targetObj)}`)
       fetch(`${BASE_API_ROUTE}${viewDelete}${encodeURIComponent(JSON.stringify(targetObj))}`)
+        .then((data) => data.json())
+        .then(deleteObj => {
+          setViewData(viewData.filter(obj => obj.id !== deleteObj.id))
+        })
     }
   }
 
   useEffect(() => {
     setViewData(request)
-    if(request && request[0])
-      props.onChangeAppProps({...appProps, currentViewProps: Object.keys(request[0])})
+    if (request && request[0])
+      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]) })
   }, [request])
 
   let currentScreen = viewData ?

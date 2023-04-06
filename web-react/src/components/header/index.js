@@ -24,8 +24,11 @@ function App(props) {
     if (currentViewObj) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
-      fetch(`${BASE_API_ROUTE}${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`).
-        then((data) => console.log(data))
+      fetch(`${BASE_API_ROUTE}${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
+      .then((data) => data.json())
+      .then(addObj => {
+          console.log(JSON.stringify(addObj))
+        })
       handleCreateClose();
     }
   }

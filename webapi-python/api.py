@@ -187,7 +187,7 @@ def update_query_result(object):
     # Execute the UPDATE statement
     cursor.execute(query)
     connection.commit()
-    return query
+    return json.dumps(update_data)
 
 
 def escape_sql_value(value):
@@ -223,7 +223,7 @@ def delete_query_result(object):
     # Execute the UPDATE statement
     cursor.execute(query)
     connection.commit()
-    return query
+    return json.dumps(delete_data)
 
 
 @app.route("/create/<query>", methods=['GET'])
@@ -253,7 +253,7 @@ def create_query_result(query):
     # Commit the transaction and close the connection
     connection.commit()
 
-    return query
+    return json.dumps(json_obj)
 
 
 @app.route("/createantigo/<entity>", methods=['GET', 'POST'])
