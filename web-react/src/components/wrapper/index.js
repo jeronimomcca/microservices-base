@@ -1,7 +1,7 @@
 import './styles.css';
 import Base from '../../views/base/Base'
 import { useEffect, useState } from 'react';
-
+import Loading from '../loading/loading';
 function App(props) {
 
   let configuration = props.configuration;
@@ -20,7 +20,10 @@ function App(props) {
     <div className="Wrapper">
       <Base appProps={props.appProps} onChangeAppProps={props.onChangeAppProps} view={currentViewObj} />
     </div> :
-    "Loading..."
+    <div className="loading-fullcontainer">
+        <Loading />
+        <h1>Loading View Data</h1>
+      </div>
   return currentScreen;
 }
 

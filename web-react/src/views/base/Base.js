@@ -4,6 +4,7 @@ import editDataObj from '../../hooks/editObject';
 import deleteDataObj from '../../hooks/deleteObject';
 import { useEffect } from 'react';
 import Table from '../../components/dataTable';
+import Loading from '../../components/loading/loading';
 
 function Base(props) {
 
@@ -32,7 +33,11 @@ function Base(props) {
     <div className="Base-content">
       <Table data={viewData} onChangeData={changeRecord} />
     </div> :
-    "Loading base"
+    <div className="loading-fullcontainer">
+      <Loading />
+      <h1>Loading View Data</h1>
+    </div>
+
 
   return currentScreen;
 

@@ -1,0 +1,84 @@
+.NewLoading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .NewLoading-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .NewLoading-balls-container {
+    display: flex;
+  }
+  
+  .NewLoading-ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation-name: NewLoading-animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+  
+  .NewLoading-ball-1 {
+    background-color: #0074D9;
+    animation-delay: 0s;
+  }
+  
+  .NewLoading-ball-2 {
+    background-color: #FF4136;
+    animation-delay: 0.125s;
+  }
+  
+  .NewLoading-ball-3 {
+    background-color: #2ECC40;
+    animation-delay: 0.25s;
+  }
+  
+  .NewLoading-ball-4 {
+    background-color: #FF851B;
+    animation-delay: 0.375s;
+  }
+  
+  .NewLoading-ball-5 {
+    background-color: #F012BE;
+    animation-delay: 0.5s;
+  }
+  
+  .NewLoading-ball-6 {
+    background-color: #7FDBFF;
+    animation-delay: 0.625s;
+  }
+  
+  .NewLoading-ball-7 {
+    background-color: #B10DC9;
+    animation-delay: 0.75s;
+  }
+  
+  .NewLoading-ball-8 {
+    background-color: #39CCCC;
+    animation-delay: 0.875s;
+  }
+  
+  @keyframes NewLoading-animation {
+    0% {
+      transform: scale(0);
+    }
+    25% {
+      transform: scale(1);
+    }
+    50% {
+      transform: translateY(-30px);
+    }
+    75% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  

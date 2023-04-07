@@ -4,7 +4,7 @@ import Header from '../../components/header';
 import Footer from '../../components/footer';
 import Wrapper from '../../components/wrapper'
 import React, { useState } from 'react';
-
+import Loading from '../../components/loading/loading';
 
 let AppProps = {
   "currentView": undefined,
@@ -27,8 +27,10 @@ function Home() {
       <Wrapper appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
       <Footer appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
     </div> :
-    "Loading..."
-
+    <div className="loading-fullcontainer">
+      <Loading />
+      <h1>Loading Configuration</h1>
+    </div>
   return currentScreen;
 
   function changeAppProps(value) {
