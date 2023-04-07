@@ -1,9 +1,9 @@
 import './styles.css';
 import Menu from '../menu'
-import { BASE_API_ROUTE } from '../../settings'
 import { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import createObject from '../../hooks/createObject';
 
 function App(props) {
   let configuration = props.configuration;
@@ -24,14 +24,15 @@ function App(props) {
     if (currentViewObj) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
-      fetch(`${BASE_API_ROUTE}${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
-        .then((data) => data.json())
-        .then(addObj => {
+      createObject(`${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
+        .then(addObjArray => {
+          const addObj = addObjArray[0];
           console.log(JSON.stringify(addObj));
-          let aux =  appProps.viewData.slice();
+          let aux = appProps.viewData.slice();
           console.log(JSON.stringify(aux));
           onChangeAppProps({ ...appProps, viewData: [...aux, addObj] });
         })
+        .catch(error => console.log(error));
       handleCreateClose();
     }
   }

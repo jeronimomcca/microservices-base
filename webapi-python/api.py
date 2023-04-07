@@ -41,6 +41,27 @@ def hello():
     return "It works!"
 
 
+def escape_sql_value(value):
+    """
+    Escape a value for use in a SQL statement, depending on its type.
+    """
+    if value is None:
+        return "NULL"
+    elif isinstance(value, bool):
+        return str(value)
+    elif isinstance(value, (int, float)):
+        return str(value)
+    elif isinstance(value, list):
+        escaped_values = [escape_sql_value(v) for v in value]
+        return f"ARRAY[{','.join(escaped_values)}]"
+    else:
+        return f"'{value}'"
+
+def create_query_based_on_user_permitions(object_name, primary_key, user):
+    #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    return f"SELECT * from {object_name} WHERE id = {primary_key}"
+
+
 def execQuery(query):
     cursor.execute(query)
     columns = [desc[0] for desc in cursor.description]
@@ -162,6 +183,7 @@ def get_query_result(query):
     print("======================= {}".format(results))
     return json.dumps(results)
 
+    
 
 @app.route("/update/<object>", methods=['GET'])
 def update_query_result(object):
@@ -187,24 +209,13 @@ def update_query_result(object):
     # Execute the UPDATE statement
     cursor.execute(query)
     connection.commit()
-    return json.dumps(update_data)
 
 
-def escape_sql_value(value):
-    """
-    Escape a value for use in a SQL statement, depending on its type.
-    """
-    if value is None:
-        return "NULL"
-    elif isinstance(value, bool):
-        return str(value)
-    elif isinstance(value, (int, float)):
-        return str(value)
-    elif isinstance(value, list):
-        escaped_values = [escape_sql_value(v) for v in value]
-        return f"ARRAY[{','.join(escaped_values)}]"
-    else:
-        return f"'{value}'"
+    #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    select_query = create_query_based_on_user_permitions(object_name, primary_key, "default")
+    
+    
+    return json.dumps( execQuery(select_query) )
 
 
 
@@ -238,6 +249,7 @@ def create_query_result(query):
     object_name = json_obj.get('object')
     del json_obj["object"]
 
+    primary_key = json_obj.get('id')
 
     # Build the SQL statement to insert a new row
     keys = []
@@ -253,7 +265,12 @@ def create_query_result(query):
     # Commit the transaction and close the connection
     connection.commit()
 
-    return json.dumps(json_obj)
+        #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    select_query = create_query_based_on_user_permitions(object_name, primary_key, "default")
+    
+    
+    return json.dumps( execQuery(select_query) )
+
 
 
 @app.route("/createantigo/<entity>", methods=['GET', 'POST'])

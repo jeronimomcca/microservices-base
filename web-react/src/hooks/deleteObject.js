@@ -1,18 +1,8 @@
-import { useEffect, useState } from 'react';
 import {BASE_API_ROUTE} from '../settings'
 
-function App(props) {
+function App(obj) {
 
-  const [response, setResponse] = useState(null);
-
-  useEffect(() => {
-    fetch( BASE_API_ROUTE + props.uri)
-      .then(response => response.json())
-      .then(data => setResponse(data))
-      .catch(error => setResponse(error));
-  }, [props.uri]);
-
-  return response;
+  return fetch( BASE_API_ROUTE + obj).then((data) => data.json());
 }
 
 export default App;
