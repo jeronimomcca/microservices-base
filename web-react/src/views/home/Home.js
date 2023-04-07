@@ -1,10 +1,10 @@
 import './Home.css';
-import fetchUrl from '../../hooks/fetchUrl';
+import fetchConfiguration from '../../hooks/fetchConfiguration';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
 import Wrapper from '../../components/wrapper'
-import React, { useEffect, useState } from 'react';
-import {CONFIG_URL} from '../../settings'
+import React, { useState } from 'react';
+
 
 let AppProps = {
   "currentView": undefined,
@@ -12,30 +12,17 @@ let AppProps = {
 }
 
 function Home() {
-  
 
   let [configuration, setConfiguration] = useState(undefined)
-
   const [appProps, setAppProps] = useState(AppProps)
-  const changeAppProps = (value) => {
-    setAppProps(value);
-  }
 
-  let requestConfiguration = fetchUrl({ uri: CONFIG_URL });
+  let requestConfiguration = fetchConfiguration();
 
-  useEffect(() => {
-    if (requestConfiguration instanceof TypeError) {
-      const fetchError = requestConfiguration;
-      console.log(`==================== Error: ${fetchError}`)
-    }
-    else if (requestConfiguration && !configuration) {
-      setConfiguration({ ...requestConfiguration });
-      changeAppProps({ ...appProps, currentView: requestConfiguration.homeView });
-    }
-  }, [requestConfiguration, configuration, appProps])
+  applyConfiguration();
+
 
   let currentScreen = configuration ?
-  <div className="Home">
+    <div className="Home">
       <Header appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
       <Wrapper appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
       <Footer appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
@@ -43,6 +30,23 @@ function Home() {
     "Loading..."
 
   return currentScreen;
+
+  function changeAppProps(value) {
+    setAppProps(value);
+  }
+
+  function applyConfiguration() {
+    if (!requestConfiguration)
+      return;
+    if (requestConfiguration instanceof TypeError) {
+      const fetchError = requestConfiguration;
+      console.log(`==================== Error: ${fetchError}`);
+    }
+    else if (requestConfiguration && !configuration) {
+      setConfiguration({ ...requestConfiguration });
+      changeAppProps({ ...appProps, currentView: requestConfiguration.homeView });
+    }
+  }
 }
 
 export default Home;
