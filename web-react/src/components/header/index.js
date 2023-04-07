@@ -155,7 +155,7 @@ function App(props) {
             onChange={updateFilterType}
             color='blue'
           />
-          {toggleFilter ? "Union" : "Exclusion"} </div> </DialogTitle>
+          {toggleFilter ? "AND" : "OR"} </div> </DialogTitle>
         <DialogContent>
           <form>
             {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
