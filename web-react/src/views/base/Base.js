@@ -31,7 +31,7 @@ function Base(props) {
 
   let currentScreen = viewData ?
     <div className="Base-content">
-      <Table data={viewData} onChangeData={changeRecord} />
+      <Table data={viewData} onChangeData={changeRecord} appProps={props.appProps} />
     </div> :
     <div className="loading-fullcontainer">
       <Loading />

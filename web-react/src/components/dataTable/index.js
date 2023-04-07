@@ -1,8 +1,8 @@
 import styles from './table.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
 
-function Table({ data, onChangeData }) {
+function Table({ data, onChangeData, appProps }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [editRow, setEditRow] = useState(null);
@@ -26,12 +26,12 @@ function Table({ data, onChangeData }) {
       return str;
     }
   }
-  
+
   const stringifyProp = (val) => {
     const objType = typeof val;
 
 
-    switch(objType) {
+    switch (objType) {
       case "object":
         return JSON.stringify(val);
         break;
@@ -39,12 +39,39 @@ function Table({ data, onChangeData }) {
         return val ? "true" : "false";
         break;
       default:
-        return val;
+        return String(val);
     }
 
   }
 
-  const sortedData = data.slice().sort((a, b) => {
+  const filter = appProps.viewFilter;
+
+  let filteredData = data;
+  if( Object.values(filter).some((value) => value !== ''))
+    filteredData = appProps.viewFilterType ? data.filter((row) => {
+      const filterProps = Object.keys(filter);
+
+      // If any filter property does not match the corresponding row property, exclude the row
+      return filterProps.every(prop => {
+        const rowPropValue = stringifyProp(row[prop]).toLowerCase();
+        const filterPropValue = filter[prop].toLowerCase();
+        return rowPropValue.includes(filterPropValue);
+      });
+    }) :
+    data.filter((row) => {
+      const filterProps = Object.keys(filter);
+
+      // If any filter property match the corresponding row property
+      return filterProps.some(prop => {
+        const rowPropValue = stringifyProp(row[prop]).toLowerCase();
+        const filterPropValue = filter[prop].toLowerCase();
+        if(filterPropValue === "")
+          return false;
+        return rowPropValue.includes(filterPropValue);
+      });
+    })
+
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortColumn !== null) {
       if (a[sortColumn] < b[sortColumn]) {
         return sortDirection === 'asc' ? -1 : 1;
@@ -76,7 +103,7 @@ function Table({ data, onChangeData }) {
     onChangeData(selectedRow, "delete")
     handleEditClose();
   };
-  
+
 
   return (
     <div>
@@ -110,8 +137,8 @@ function Table({ data, onChangeData }) {
               <TextField
                 key={key}
                 label={key}
-                value={stringifyProp( selectedRow[key])}
-                onChange={(event) => setSelectedRow({...selectedRow, [key]: tryParseJSON(event.target.value)})}
+                value={stringifyProp(selectedRow[key])}
+                onChange={(event) => setSelectedRow({ ...selectedRow, [key]: tryParseJSON(event.target.value) })}
                 fullWidth
               />
             ))}

@@ -14,7 +14,7 @@
   }
   
   .Header-menu {
-    width: 5%;
+    width: 10%;
     margin-left: 2%;
 
   }
@@ -25,7 +25,7 @@
     border-radius: 0; /* Remove button border radius */
     border: none; /* Remove button border */
     padding: 10px 20px; /* Add some padding */
-    width: 5%;
+    width: 8vh;
     margin-left: 2%;
   }
   
@@ -35,5 +35,24 @@
   
   #green-button .MuiButton-label::after {
     content: "ADD"; /* Add the "+" symbol */
+  }
+  
+  #grey-button {
+    background-color: grey;
+  color: white;
+    border-radius: 0; /* Remove button border radius */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Add some padding */
+    width: 8vh;
+    margin-left: 2%;
+    
+  }
+  
+  #grey-button:hover {
+    background-color: #2b2e2c; /* Darker green background color on hover */
+  }
+  
+  #grey-button .MuiButton-label::after {
+    content: "SEARCH"; /* Add the "+" symbol */
   }
   

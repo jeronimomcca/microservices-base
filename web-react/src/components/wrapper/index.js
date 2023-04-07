@@ -21,9 +21,9 @@ function App(props) {
       <Base appProps={props.appProps} onChangeAppProps={props.onChangeAppProps} view={currentViewObj} />
     </div> :
     <div className="loading-fullcontainer">
-        <Loading />
-        <h1>Loading View Data</h1>
-      </div>
+      <Loading />
+      <h1>Loading View Data</h1>
+    </div>
   return currentScreen;
 }
 

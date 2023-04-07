@@ -28,7 +28,7 @@ export default function SimpleMenu(props) {
     const view = event.currentTarget.getAttribute("id");
 
     if (view && currentView !== view)
-      onChangeAppProps({ ...appProps, currentView: view })
+      onChangeAppProps({ ...appProps, currentView: view, viewFilter: {} })
     handleClose()
   };
 

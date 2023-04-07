@@ -8,7 +8,8 @@ import Loading from '../../components/loading/loading';
 
 let AppProps = {
   "currentView": undefined,
-  "viewData": undefined
+  "viewData": undefined,
+  "viewFilter": {}
 }
 
 function Home() {
