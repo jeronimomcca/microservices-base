@@ -13,15 +13,12 @@ function Base(props) {
   const appProps = props.appProps;
   let viewData = appProps.viewData;
   let setViewData = (data) => {
-    props.onChangeAppProps({ ...appProps, viewData: data });
+      props.onChangeAppProps({...appProps, viewData:data});
   }
 
   let query = view.query
 
-  let request = undefined;
-
-  if (query)
-    request = fetchUrl({ uri: viewFetchUri + "/" + encodeURIComponent(JSON.stringify(query)) });
+  let request = fetchUrl({ uri: viewFetchUri + "/" + encodeURIComponent(JSON.stringify(query)) });
 
   const changeRecord = (targetObj, operation) => {
     targetObj.object = view.object;
@@ -50,8 +47,8 @@ function Base(props) {
   }
 
   useEffect(() => {
-    if (request && request[0]) {
-      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]), viewData: request });
+    if (request && request[0]){
+      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]),  viewData: request });
 
     }
   }, [request])
