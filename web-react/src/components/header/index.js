@@ -31,8 +31,6 @@ function App(props) {
           let aux =  appProps.viewData.slice();
           console.log(JSON.stringify(aux));
           onChangeAppProps({ ...appProps, viewData: [...aux, addObj] });
-
-          //onChangeAppProps({ ...appProps, viewData: {...aux.push(addObj)} });
         })
       handleCreateClose();
     }
