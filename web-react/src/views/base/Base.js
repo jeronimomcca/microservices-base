@@ -18,7 +18,7 @@ function Base(props) {
 
   let query = view.query
 
-  let request = fetchUrl({ uri: viewFetchUri + "/" + encodeURIComponent(JSON.stringify(query)) });
+  let request = fetchUrl({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
 
   const changeRecord = (targetObj, operation) => {
     targetObj.object = view.object;
