@@ -4,7 +4,7 @@ import {BASE_API_ROUTE} from '../settings'
 function App(props) {
 
   const [response, setResponse] = useState(null);
-  let [hasRequest, setHasRequest] = useState(false);
+  let [hasRequest] = useState(false);
 
   const scheduleApiCall = () => {
     fetch( BASE_API_ROUTE + props.uri)

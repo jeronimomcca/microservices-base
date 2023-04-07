@@ -3,8 +3,7 @@ import fetchData from '../../hooks/fetchData';
 import editDataObj from '../../hooks/editObject';
 import deleteDataObj from '../../hooks/deleteObject';
 import { useEffect } from 'react';
-import Table from '../../components/dataTable'
-import { BASE_API_ROUTE } from '../../settings'
+import Table from '../../components/dataTable';
 
 function Base(props) {
 
