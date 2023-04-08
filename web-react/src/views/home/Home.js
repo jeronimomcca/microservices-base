@@ -5,11 +5,13 @@ import Footer from '../../components/footer';
 import Wrapper from '../../components/wrapper'
 import React, { useState } from 'react';
 import Loading from '../../components/loading/loading';
+import {DEFAULT_FILTER_TYPE} from '../../settings'
 
 let AppProps = {
   "currentView": undefined,
   "viewData": undefined,
-  "viewFilter": {}
+  "viewFilter": {},
+  "viewFilterType": DEFAULT_FILTER_TYPE
 }
 
 function Home() {

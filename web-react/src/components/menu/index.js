@@ -42,8 +42,6 @@ export default function SimpleMenu(props) {
     </MenuItem>
   ))
 
-
-
   return (
     <div>
       <Button id="Menu-Button" onClick={handleClick}>

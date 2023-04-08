@@ -5,6 +5,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, S
 import AddIcon from '@material-ui/icons/Add';
 import { Search } from '@material-ui/icons';
 import createObject from '../../hooks/createObject';
+import { DEFAULT_FILTER_TYPE } from '../../settings';
 
 function App(props) {
   let configuration = props.configuration;
@@ -19,13 +20,11 @@ function App(props) {
   const [createOpen, setCreateOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [createObj, setCreateObj] = useState({});
-  const [toggleFilter, setToggleFilter] = useState(true);
 
   const updateFilterType = () => {
-    setToggleFilter(!toggleFilter);
-    onChangeAppProps({ ...appProps, viewFilterType: !toggleFilter });
+    onChangeAppProps({ ...appProps, viewFilterType: !appProps.viewFilterType });
   }
-  // const [filterObj, setFilterObj] = useState({});
+
   let [currentViewObj, setCurrentViewObj] = useState(undefined);
   let currentView = appProps.currentView;
 
@@ -97,6 +96,8 @@ function App(props) {
   const handleClearFilterClose = () => {
     setFilterOpen(false);
     loadFilterProps();
+    if (appProps.viewFilterType != DEFAULT_FILTER_TYPE)
+      onChangeAppProps({ ...appProps, viewFilterType: DEFAULT_FILTER_TYPE });
   };
 
   return (
@@ -151,11 +152,11 @@ function App(props) {
       <Dialog open={filterOpen} onClose={handleFilterClose}>
         <DialogTitle> <div> <p> Filter </p>
           <Switch
-            checked={toggleFilter}
+            checked={appProps.viewFilterType}
             onChange={updateFilterType}
             color='blue'
           />
-          {toggleFilter ? "AND" : "OR"} </div> </DialogTitle>
+          {appProps.viewFilterType ? "AND" : "OR"} </div> </DialogTitle>
         <DialogContent>
           <form>
             {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
