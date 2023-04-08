@@ -49,7 +49,7 @@ function Home() {
     }
     else if (requestConfiguration && !configuration) {
       setConfiguration({ ...requestConfiguration });
-      changeAppProps({ ...appProps, currentView: requestConfiguration.homeView });
+      changeAppProps({ ...appProps, currentView: requestConfiguration.views[0].name });
     }
   }
 }
