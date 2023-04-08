@@ -69,6 +69,86 @@ def execQuery(query):
     return result
 
 
+
+# def execQuery(query):
+#     cursor.execute(query)
+#     columns = [desc[0] for desc in cursor.description]
+#     data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+#     result = {'headers': columns, 'data':data}
+#     return result
+
+
+
+
+# -- Table: public.configurations
+
+# -- DROP TABLE public.configurations;
+
+# CREATE TABLE public.configurations
+# (
+#     id integer NOT NULL,
+#     module integer,
+#     attribute character varying(50) COLLATE pg_catalog."default",
+#     value character varying(5000) COLLATE pg_catalog."default",
+#     user_id integer,
+#     CONSTRAINT configurations_pkey PRIMARY KEY (id)
+# )
+# WITH (
+#     OIDS = FALSE
+# )
+# TABLESPACE pg_default;
+
+
+
+# -- Table: public.users
+
+# -- DROP TABLE public.users;
+
+# CREATE TABLE public.users
+# (
+#     id integer NOT NULL,
+#     name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     login character varying(100) COLLATE pg_catalog."default" NOT NULL,
+#     password character varying(100) COLLATE pg_catalog."default",
+#     views integer[],
+#     widgets integer[],
+#     CONSTRAINT users_pkey PRIMARY KEY (id)
+# )
+# WITH (
+#     OIDS = FALSE
+# )
+# TABLESPACE pg_default;
+
+# ALTER TABLE public.users
+#     OWNER to postgres;
+
+
+# -- Table: public.views
+
+# -- DROP TABLE public.views;
+
+# CREATE TABLE public.views
+# (
+#     id integer NOT NULL,
+#     name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     object character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     delete character varying(50) COLLATE pg_catalog."default",
+#     "create" character varying(50) COLLATE pg_catalog."default",
+#     get character varying(50) COLLATE pg_catalog."default",
+#     update character varying(50) COLLATE pg_catalog."default",
+#     query integer[],
+#     CONSTRAINT views_pkey PRIMARY KEY (id)
+# )
+# WITH (
+#     OIDS = FALSE
+# )
+# TABLESPACE pg_default;
+
+# ALTER TABLE public.views
+#     OWNER to postgres;
+
+
+
 @app.route("/web-app/<query>", methods=['GET'])
 def get_web_app(query):
     # dataEntity = json.loads(str(entity))
@@ -87,7 +167,7 @@ def get_web_app(query):
          "query": {
             "object": "entity",
             "filter": [
-               "\"isFact\" = true"
+               "\"isFact\" is not null"
             ],
             "sort": "id"
          },
@@ -112,21 +192,18 @@ def get_web_app(query):
          "permission": "crud"
       },
       {
-         "name": "view3",
-         "object": "entity",
+         "name": "Views",
+         "object": "views",
          "delete": "/delete/",
          "create": "/create/",
          "get": "/get/",
          "update": "/update/",
          "type": "api",
          "query": {
-            "object": "entity",
-            "filter": [
-               "\"isFact\" IS NOT NULL"
-            ],
+            "object": "views",
+            "filter": [],
             "sort": "id"
          },
-         "source": "/get/",
          "permission": "r"
       },
       {
@@ -151,10 +228,8 @@ def get_web_app(query):
    "widgets": [
       "clock",
       "user"
-   ],
-   "homeView": "Entity"
+   ]
 })
-
 
 @app.route("/get/<query>", methods=['GET'])
 def get_query_result(query):

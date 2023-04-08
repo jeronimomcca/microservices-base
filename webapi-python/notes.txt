@@ -1,1 +1,8 @@
 This should provide a secure REST web API to connect to database and expose data in a json format
+
+
+
+Create more methods so we have the same piece of code for all methods that need it
+Create users with different permissions
+Create configurations for each users
+

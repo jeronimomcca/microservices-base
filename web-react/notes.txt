@@ -12,4 +12,7 @@ This should have a dynamic way to load data from the web API and mount generic v
 
 
 Roadmap:
-1.
+0. Create a store to manage states
+1. Create a login view
+2. make main menu able to group views by categories
+3. 
