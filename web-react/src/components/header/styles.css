@@ -22,7 +22,7 @@
   #green-button {
     background-color: green;
   color: white;
-    border-radius: 0; /* Remove button border radius */
+    border-radius: 5; /* Remove button border radius */
     border: none; /* Remove button border */
     padding: 10px 20px; /* Add some padding */
     width: 8vh;
@@ -40,10 +40,10 @@
   #grey-button {
     background-color: grey;
   color: white;
-    border-radius: 0; /* Remove button border radius */
+    border-radius: 5; /* Remove button border radius */
     border: none; /* Remove button border */
     padding: 10px 20px; /* Add some padding */
-    width: 8vh;
+    width: 11vh;
     margin-left: 2%;
     
   }
