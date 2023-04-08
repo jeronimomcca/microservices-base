@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {BASE_API_ROUTE} from '../settings'
+import {BASE_API_ROUTE, FETCH_DATA_RETRY_TIMEOUT} from '../settings'
 
 function App(props) {
 
@@ -10,8 +10,10 @@ function App(props) {
     fetch( BASE_API_ROUTE + props.uri)
       .then(response => response.json())
       .then(data => setResponse(data))
-      .catch(error => setResponse(error));
-
+      .catch((error) => {
+        setResponse(error);
+        setTimeout(() => scheduleApiCall() , [FETCH_DATA_RETRY_TIMEOUT]);
+      });
   }
 
   useEffect(() => {

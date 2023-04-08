@@ -3,3 +3,13 @@ This should have a dynamic way to load data from the web API and mount generic v
 2. Open the main view wraped on the home view, which may provide menus, router, header and docker
 3. All other views inherit from the base view 
 3. Set the main bahavior
+
+
+
+
+
+
+
+
+Roadmap:
+1.
