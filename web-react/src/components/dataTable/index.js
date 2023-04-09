@@ -4,8 +4,6 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } 
 import store from '../../stores/store';
 
 function Table({ onChangeData }) {
-  const data = store.appProps.viewData;
-  const appProps = store.appProps;
   const [selectedRow, setSelectedRow] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [editRow, setEditRow] = useState(null);
@@ -46,12 +44,15 @@ function Table({ onChangeData }) {
     }
 
   }
+  
+  const filter = store.appProps.viewFilter;
+  const data = store.appProps.viewData;
 
-  const filter = appProps.viewFilter;
+  console.log(`======filter: ${JSON.stringify(filter)}`)
 
-  let filteredData = data;
+  let filteredData = store.appProps.viewData;
   if( Object.values(filter).some((value) => value !== ''))
-    filteredData = appProps.viewFilterType ? data.filter((row) => {
+    filteredData = store.appProps.viewFilterType ? data.filter((row) => {
       const filterProps = Object.keys(filter);
 
       // If any filter property does not match the corresponding row property, exclude the row

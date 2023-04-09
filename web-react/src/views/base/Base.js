@@ -2,11 +2,9 @@ import './Base.css';
 import fetchData from '../../hooks/fetchData';
 import editDataObj from '../../hooks/editObject';
 import deleteDataObj from '../../hooks/deleteObject';
-import { useEffect, useState } from 'react';
 import Table from '../../components/dataTable';
 import Loading from '../../components/loading/loading';
 import store from '../../stores/store';
-import { observer } from 'mobx-react-lite';
 
 function Base(props) {
 
@@ -23,20 +21,7 @@ function Base(props) {
   let query = view.query
 
 
-
-  console.log(`Base: store.appProps.viewData: ${JSON.stringify(store.appProps.viewData)}`);
-  console.log(`Base: view: ${JSON.stringify(view)}`);
-
-
-   fetchData({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
-
- 
-  // useEffect(() => {
-  //   if (request && request[0]) {
-  //     store.setAppProps({ currentViewProps: Object.keys(request[0]), viewData: request });
-  //     console.log(`======= request: ${JSON.stringify(request)}`)
-  //   }
-  // }, [])
+  fetchData({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
 
 
   let currentScreen = !store.appProps.viewData ?

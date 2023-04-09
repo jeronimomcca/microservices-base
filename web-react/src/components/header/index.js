@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite';
 
 const App = observer(() => {
 
-  const [filterObj] = useState( store.appProps.viewFilter);
+  const filterObj =  store.appProps.viewFilter;
   const setFilterObj = (val) => {
     store.setAppProps({ viewFilter: val });
   }

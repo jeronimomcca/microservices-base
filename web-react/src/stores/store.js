@@ -26,8 +26,8 @@ class Store {
     this.data = data;
   }
   setAppProps(data) {
-    console.log(`-------store.setAppProps.data: ${JSON.stringify(data)}`)
-    console.log(`-------store.appProps: ${JSON.stringify(this.appProps)}`);
+    // console.log(`-------store.setAppProps.data: ${JSON.stringify(data)}`)
+    // console.log(`-------store.appProps: ${JSON.stringify(this.appProps)}`);
     this.appProps = {...this.appProps, ...data};
   }
   setConfiguration(data) {

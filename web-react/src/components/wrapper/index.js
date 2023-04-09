@@ -14,8 +14,8 @@ const App = observer(() => {
     if (store.configuration.views) {
       setCurrentViewObj(store.configuration.views.find((view) => view.name === store.appProps.currentView))
     }
-    console.log(`-----------wrapper.currentViewObj: ${JSON.stringify(currentViewObj)}`);
-    console.log(`-----------wrapper.store.appProps.currentView: ${JSON.stringify(store.appProps.currentView)}`)
+    // console.log(`-----------wrapper.currentViewObj: ${JSON.stringify(currentViewObj)}`);
+    // console.log(`-----------wrapper.store.appProps.currentView: ${JSON.stringify(store.appProps.currentView)}`)
   }, [store.appProps.currentView, store.configuration])
 
   let currentScreen = currentViewObj ?
