@@ -3,55 +3,34 @@ import fetchConfiguration from '../../hooks/fetchConfiguration';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
 import Wrapper from '../../components/wrapper'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Loading from '../../components/loading/loading';
-import {DEFAULT_FILTER_TYPE} from '../../settings'
+import store from '../../stores/store';
 
-let AppProps = {
-  "currentView": undefined,
-  "viewData": undefined,
-  "viewFilter": {},
-  "viewFilterType": DEFAULT_FILTER_TYPE
-}
 
 function Home() {
 
-  let [configuration, setConfiguration] = useState(undefined)
-  const [appProps, setAppProps] = useState(AppProps)
+  let configuration = store.configuration;
 
-  let requestConfiguration = fetchConfiguration();
+  fetchConfiguration();
 
-  applyConfiguration();
+  let currentScreen = <div className="loading-fullcontainer">
+    <Loading />
+    <h1>Loading Configuration</h1>
+  </div>
 
 
-  let currentScreen = configuration ?
-    <div className="Home">
-      <Header appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
-      <Wrapper appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
-      <Footer appProps={appProps} configuration={configuration} onChangeAppProps={changeAppProps} />
-    </div> :
-    <div className="loading-fullcontainer">
-      <Loading />
-      <h1>Loading Configuration</h1>
-    </div>
+  if (configuration.views)
+    currentScreen =
+      <div className="Home">
+        <Header />
+        <Wrapper />
+        <Footer />
+      </div>
+
+
   return currentScreen;
 
-  function changeAppProps(value) {
-    setAppProps(value);
-  }
-
-  function applyConfiguration() {
-    if (!requestConfiguration)
-      return;
-    if (requestConfiguration instanceof TypeError) {
-      const fetchError = requestConfiguration;
-      console.log(`==================== Error: ${fetchError}`);
-    }
-    else if (requestConfiguration && !configuration) {
-      setConfiguration({ ...requestConfiguration });
-      changeAppProps({ ...appProps, currentView: requestConfiguration.views[0].name });
-    }
-  }
 }
 
 export default Home;

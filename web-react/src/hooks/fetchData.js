@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react';
 import {BASE_API_ROUTE, FETCH_DATA_RETRY_TIMEOUT} from '../settings'
-
+import store from '../stores/store';
 function App(props) {
 
-  const [response, setResponse] = useState(null);
   let [hasRequest] = useState(false);
+  let [hasResponse, setHasResponse] = useState(false);
 
   const scheduleApiCall = () => {
     fetch( BASE_API_ROUTE + props.uri)
       .then(response => response.json())
-      .then(data => setResponse(data))
+      .then(data =>  {
+        store.setAppProps({ currentViewProps: Object.keys(data[0]), viewData: data });
+        setHasResponse(true);
+        hasRequest = false;
+      })
       .catch((error) => {
-        setResponse(error);
+        console.log(`==========Error fetching data: ${JSON.stringify(error)}`)
         setTimeout(() => scheduleApiCall() , [FETCH_DATA_RETRY_TIMEOUT]);
+        hasRequest = false;
       });
   }
 
@@ -24,7 +29,7 @@ function App(props) {
     }
   }, [props.uri]);
 
-  return response;
+  return hasResponse;
 }
 
 export default App;

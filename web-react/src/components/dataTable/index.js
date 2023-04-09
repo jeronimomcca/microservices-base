@@ -1,8 +1,11 @@
 import styles from './table.module.css';
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
+import store from '../../stores/store';
 
-function Table({ data, onChangeData, appProps }) {
+function Table({ onChangeData }) {
+  const data = store.appProps.viewData;
+  const appProps = store.appProps;
   const [selectedRow, setSelectedRow] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [editRow, setEditRow] = useState(null);

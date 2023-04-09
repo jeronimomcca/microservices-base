@@ -2,9 +2,11 @@ import './Base.css';
 import fetchData from '../../hooks/fetchData';
 import editDataObj from '../../hooks/editObject';
 import deleteDataObj from '../../hooks/deleteObject';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Table from '../../components/dataTable';
 import Loading from '../../components/loading/loading';
+import store from '../../stores/store';
+import { observer } from 'mobx-react-lite';
 
 function Base(props) {
 
@@ -12,31 +14,41 @@ function Base(props) {
   const viewFetchUri = view.get;
   const viewUpdate = view.update;
   const viewDelete = view.delete;
-  const appProps = props.appProps;
-  let viewData = appProps.viewData;
+  let viewData = store.appProps.viewData;
+
   let setViewData = (data) => {
-    props.onChangeAppProps({ ...appProps, viewData: data });
+    store.setAppProps({ viewData: data });
   }
 
   let query = view.query
 
-  let request = fetchData({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
 
-  useEffect(() => {
-    if (request && request[0]) {
-      props.onChangeAppProps({ ...appProps, currentViewProps: Object.keys(request[0]), viewData: request });
 
-    }
-  }, [request])
+  console.log(`Base: store.appProps.viewData: ${JSON.stringify(store.appProps.viewData)}`);
+  console.log(`Base: view: ${JSON.stringify(view)}`);
 
-  let currentScreen = viewData ?
-    <div className="Base-content">
-      <Table data={viewData} onChangeData={changeRecord} appProps={props.appProps} />
-    </div> :
+
+   fetchData({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
+
+ 
+  // useEffect(() => {
+  //   if (request && request[0]) {
+  //     store.setAppProps({ currentViewProps: Object.keys(request[0]), viewData: request });
+  //     console.log(`======= request: ${JSON.stringify(request)}`)
+  //   }
+  // }, [])
+
+
+  let currentScreen = !store.appProps.viewData ?
+
     <div className="loading-fullcontainer">
       <Loading />
-      <h1>Loading View Data</h1>
+      <h1>Loading View Data 2</h1>
+    </div> :
+    <div className="Base-content">
+      <Table onChangeData={changeRecord} />
     </div>
+
 
 
   return currentScreen;

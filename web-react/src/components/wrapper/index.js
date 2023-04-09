@@ -2,29 +2,32 @@ import './styles.css';
 import Base from '../../views/base/Base'
 import { useEffect, useState } from 'react';
 import Loading from '../loading/loading';
-function App(props) {
+import store from '../../stores/store';
+import { observer } from 'mobx-react-lite';
 
-  let configuration = props.configuration;
-  let appProps = props.appProps;
+const App = observer(() => {
 
-
+  
   let [currentViewObj, setCurrentViewObj] = useState(undefined)
-  let currentViewName = appProps.currentView
+  
   useEffect(() => {
-    if (configuration) {
-      setCurrentViewObj(configuration.views.find((view) => view.name === currentViewName))
+    if (store.configuration.views) {
+      setCurrentViewObj(store.configuration.views.find((view) => view.name === store.appProps.currentView))
     }
-  }, [appProps.currentView, configuration, currentViewName])
+    console.log(`-----------wrapper.currentViewObj: ${JSON.stringify(currentViewObj)}`);
+    console.log(`-----------wrapper.store.appProps.currentView: ${JSON.stringify(store.appProps.currentView)}`)
+  }, [store.appProps.currentView, store.configuration])
 
   let currentScreen = currentViewObj ?
     <div className="Wrapper">
-      <Base appProps={props.appProps} onChangeAppProps={props.onChangeAppProps} view={currentViewObj} />
+      <Base view={currentViewObj} />
     </div> :
     <div className="loading-fullcontainer">
       <Loading />
-      <h1>Loading View Data</h1>
+      <h1>Loading View Data 1</h1>
     </div>
   return currentScreen;
-}
+
+});
 
 export default App;

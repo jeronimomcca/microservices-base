@@ -3,8 +3,8 @@ import './styles.css';
 
 function App(props) {
 
-  // let configuration = props.configuration;
-  // let onChangeAppProps = props.onChangeAppProps;
+  // let configuration = store.configuration;
+  // let onChangeAppProps = store.setAppProps;
   // let appProps = props.appProps;
 
   // let currentView = appProps.currentView
