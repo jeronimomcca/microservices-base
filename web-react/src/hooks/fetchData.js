@@ -10,7 +10,7 @@ function App(props) {
     fetch( BASE_API_ROUTE + props.uri)
       .then(response => response.json())
       .then(data =>  {
-        store.setAppProps({ currentViewProps: Object.keys(data[0]), viewData: data });
+        store.setAppProps({ currentViewProps: data.headers, viewData: data.data });
         setHasResponse(true);
         hasRequest = false;
       })

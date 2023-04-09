@@ -62,20 +62,20 @@ def create_query_based_on_user_permitions(object_name, primary_key, user):
     return f"SELECT * from {object_name} WHERE id = {primary_key}"
 
 
-def execQuery(query):
-    cursor.execute(query)
-    columns = [desc[0] for desc in cursor.description]
-    result = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    return result
-
-
-
 # def execQuery(query):
 #     cursor.execute(query)
 #     columns = [desc[0] for desc in cursor.description]
-#     data = [dict(zip(columns, row)) for row in cursor.fetchall()]
-#     result = {'headers': columns, 'data':data}
+#     result = [dict(zip(columns, row)) for row in cursor.fetchall()]
 #     return result
+
+
+
+def execQuery(query):
+    cursor.execute(query)
+    columns = [desc[0] for desc in cursor.description]
+    data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    result = {'headers': columns, 'data':data}
+    return result
 
 
 
