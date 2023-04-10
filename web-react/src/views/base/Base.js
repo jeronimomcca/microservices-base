@@ -12,20 +12,11 @@ function Base(props) {
   const viewFetchUri = view.get;
   const viewUpdate = view.update;
   const viewDelete = view.delete;
-  let viewData = store.appProps.viewData;
-
-  let setViewData = (data) => {
-    store.setAppProps({ viewData: data });
-  }
 
   let query = view.query
-
-
   fetchData({ uri: viewFetchUri + encodeURIComponent(JSON.stringify(query)) });
 
-
   let currentScreen = !store.appProps.viewData ?
-
     <div className="loading-fullcontainer">
       <Loading />
       <h1>Loading View Data 2</h1>
@@ -34,10 +25,7 @@ function Base(props) {
       <Table onChangeData={changeRecord} />
     </div>
 
-
-
   return currentScreen;
-
 
   function changeRecord(targetObj, operation) {
     targetObj.object = view.object;
@@ -45,25 +33,12 @@ function Base(props) {
     if (operation === "update") {
       console.log(`updating ${JSON.stringify(targetObj)}`)
       editDataObj(`${viewUpdate}${encodeURIComponent(JSON.stringify(targetObj))}`)
-        .then(data => {
-          const updatedObj = data[0];
-          console.log(`----------${JSON.stringify(updatedObj)}`)
-          setViewData(viewData.map(obj => {
-            if (obj.id === updatedObj.id) {
-              return updatedObj;
-            }
-            return obj;
-          }))
-        })
-        .catch(error => console.log(error))
+        
     }
     else if (operation === "delete") {
       console.log(`deleting ${JSON.stringify(targetObj)}`)
       deleteDataObj(`${viewDelete}${encodeURIComponent(JSON.stringify(targetObj))}`)
-        .then(deleteObj => {
-          setViewData(viewData.filter(obj => obj.id !== deleteObj.id))
-        })
-        .catch(error => console.log(error))
+        
     }
   }
 }

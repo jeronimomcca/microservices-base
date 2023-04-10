@@ -38,15 +38,7 @@ const App = observer(() => {
     if (currentViewObj) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
-      createObject(`${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
-        .then(addObjArray => {
-          const addObj = addObjArray[0];
-          console.log(JSON.stringify(addObj));
-          let aux = store.appProps.viewData.slice();
-          console.log(JSON.stringify(aux));
-          store.setAppProps({ viewData: [...aux, addObj] });
-        })
-        .catch(error => console.log(error));
+      createObject(`${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`);
       handleCreateClose();
     }
   }
