@@ -61,11 +61,8 @@ const App = observer(() => {
   };
 
   const callFilterForm = () => {
-    if (currentViewObj) {
-      console.log(JSON.stringify(filterObj))
-
+    if (currentViewObj)
       handleFilterClose();
-    }
   }
 
   const loadFilterProps = () => {
@@ -82,8 +79,6 @@ const App = observer(() => {
 
   const handleFilterOpen = () => {
     setFilterOpen(true);
-    console.log(`---------${JSON.stringify(filterObj)}`)
-    console.log(`---------${JSON.stringify(store.appProps.currentViewProps)}`)
     if (Object.keys(filterObj).length != Object.keys(store.appProps.currentViewProps).length)
       loadFilterProps();
   };

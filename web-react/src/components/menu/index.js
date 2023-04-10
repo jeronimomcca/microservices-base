@@ -21,9 +21,8 @@ export default function SimpleMenu(props) {
 
   const handleChoose = (event) => {
     const view = event.currentTarget.getAttribute("id");
-    console.log(`==vai tentar setar view: ${view} se essa for diferente de ${store.appProps.currentView}`)
     if (view && store.appProps.currentView !== view)
-    store.setAppProps({ currentView: view, viewFilter: {} });
+      store.setAppProps({ currentView: view, viewFilter: {} });
     handleClose();
   };
 

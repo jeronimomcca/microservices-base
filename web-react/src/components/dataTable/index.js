@@ -50,8 +50,6 @@ function Table({ onChangeData }) {
   let filteredData = store.appProps.viewData;
   const currentViewProps = store.appProps.currentViewProps;
 
-  console.log(`======filter: ${JSON.stringify(filter)}`)
-
   if( Object.values(filter).some((value) => value !== ''))
     filteredData = store.appProps.viewFilterType ? data.filter((row) => {
       const filterProps = Object.keys(filter);
