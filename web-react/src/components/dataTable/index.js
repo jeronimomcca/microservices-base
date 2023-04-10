@@ -47,10 +47,11 @@ function Table({ onChangeData }) {
   
   const filter = store.appProps.viewFilter;
   const data = store.appProps.viewData;
+  let filteredData = store.appProps.viewData;
+  const currentViewProps = store.appProps.currentViewProps;
 
   console.log(`======filter: ${JSON.stringify(filter)}`)
 
-  let filteredData = store.appProps.viewData;
   if( Object.values(filter).some((value) => value !== ''))
     filteredData = store.appProps.viewFilterType ? data.filter((row) => {
       const filterProps = Object.keys(filter);
@@ -114,7 +115,7 @@ function Table({ onChangeData }) {
       <table className={styles.table}>
         <thead>
           <tr>
-            {Object.keys(data[0]).map(key => (
+            {Object.values(currentViewProps).map(key => (
               <th key={key} onClick={() => handleHeaderClick(key)}>
                 {key}
                 {sortColumn === key &&
