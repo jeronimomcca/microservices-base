@@ -57,8 +57,9 @@ def escape_sql_value(value):
     else:
         return f"'{value}'"
 
+
 def create_query_based_on_user_permitions(object_name, primary_key, user):
-    #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    # REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
     return f"SELECT * from {object_name} WHERE id = {primary_key}"
 
 
@@ -69,15 +70,12 @@ def create_query_based_on_user_permitions(object_name, primary_key, user):
 #     return result
 
 
-
 def execQuery(query):
     cursor.execute(query)
     columns = [desc[0] for desc in cursor.description]
     data = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    result = {'headers': columns, 'data':data}
+    result = {'headers': columns, 'data': data}
     return result
-
-
 
 
 # -- Table: public.configurations
@@ -97,7 +95,6 @@ def execQuery(query):
 #     OIDS = FALSE
 # )
 # TABLESPACE pg_default;
-
 
 
 # -- Table: public.users
@@ -148,88 +145,99 @@ def execQuery(query):
 #     OWNER to postgres;
 
 
-
 @app.route("/web-app/<query>", methods=['GET'])
 def get_web_app(query):
     # dataEntity = json.loads(str(entity))
     # permissions r- read, u- update, c- create, d- delete
     if query == "configuration":
-        return json.dumps({
-   "views": [
-      {
-         "name": "Entity",
-         "type": "object",
-         "object": "entity",
-         "delete": "/delete/",
-         "create": "/create/",
-         "get": "/get/",
-         "update": "/update/",
-         "query": {
-            "object": "entity",
-            "filter": [
-               "\"isFact\" is not null"
-            ],
-            "sort": "id"
-         },
-         "permission": "r"
-      },
-      {
-         "name": "Links",
-         "object": "links",
-         "delete": "/delete/",
-         "create": "/create/",
-         "get": "/get/",
-         "update": "/update/",
-         "type": "object",
-         "source": "/get/",
-         "query": {
-            "object": "links",
-            "filter": [
+        views_query = "select * from views"
+        result = execQuery(views_query)
+        views = result.get("data")
+        for view in views:
+            view["object"] = view["table_name"]
+            view["query"] = { "object": view["table_name"], "sort": "id" }
 
-            ],
-            "sort": "id"
-         },
-         "permission": "crud"
-      },
-      {
-         "name": "Views",
-         "object": "views",
-         "delete": "/delete/",
-         "create": "/create/",
-         "get": "/get/",
-         "update": "/update/",
-         "type": "api",
-         "query": {
-            "object": "views",
-            "filter": [],
-            "sort": "id"
-         },
-         "permission": "r"
-      },
-      {
-         "name": "view4",
-         "object": "entity",
-         "delete": "/delete/",
-         "create": "/create/",
-         "get": "/get/",
-         "update": "/update/",
-         "type": "object",
-         "source": "/get/",
-         "query": {
-            "object": "entity",
-            "filter": [
-               "\"isFact\" = false"
-            ],
-            "sort": "id"
-         },
-         "permission": "crud"
-      }
-   ],
-   "widgets": [
-      "clock",
-      "user"
-   ]
-})
+    print(views)
+
+    return json.dumps( {"views": views})
+
+
+    # return json.dumps({
+    #     "views": [
+    #         {
+    #             "name": "Entity",
+    #             "type": "object",
+    #             "object": "entity",
+    #             "delete": "/delete/",
+    #             "create": "/create/",
+    #             "get": "/get/",
+    #             "update": "/update/",
+    #             "query": {
+    #                 "object": "entity",
+    #                 "filter": [
+    #                     "\"isFact\" is not null"
+    #                 ],
+    #                 "sort": "id"
+    #             },
+    #             "permission": "r"
+    #         },
+    #         {
+    #             "name": "Links",
+    #             "object": "links",
+    #             "delete": "/delete/",
+    #             "create": "/create/",
+    #             "get": "/get/",
+    #             "update": "/update/",
+    #             "type": "object",
+    #             "source": "/get/",
+    #             "query": {
+    #                 "object": "links",
+    #                 "filter": [
+    #                 ],
+    #                 "sort": "id"
+    #             },
+    #             "permission": "crud"
+    #         },
+    #         {
+    #             "name": "Views",
+    #             "object": "views",
+    #             "delete": "/delete/",
+    #             "create": "/create/",
+    #             "get": "/get/",
+    #             "update": "/update/",
+    #             "type": "api",
+    #             "query": {
+    #                 "object": "views",
+    #                 "filter": [],
+    #                 "sort": "id"
+    #             },
+    #             "permission": "r"
+    #         },
+    #         {
+    #             "name": "view4",
+    #             "object": "entity",
+    #             "delete": "/delete/",
+    #             "create": "/create/",
+    #             "get": "/get/",
+    #             "update": "/update/",
+    #             "type": "object",
+    #             "source": "/get/",
+    #             "query": {
+    #                 "object": "entity",
+    #                 "filter": [
+    #                     "\"isFact\" = false"
+    #                 ],
+    #                 "sort": "id"
+    #             },
+    #             "permission": "crud"
+    #         }
+    #     ],
+    #     "widgets": [
+    #         "clock",
+    #         "user"
+    #     ]
+    # })
+
 
 @app.route("/get/<query>", methods=['GET'])
 def get_query_result(query):
@@ -255,13 +263,12 @@ def get_query_result(query):
     # Execute the SQL query and fetch the results
     results = execQuery(query)
 
-    print("======================= {}".format(results))
     return json.dumps(results)
 
-    
 
 @app.route("/update/<object>", methods=['GET'])
 def update_query_result(object):
+    print(object)
     decoded_query = unquote(object)
     update_data = json.loads(decoded_query)
     object_name = update_data["object"]
@@ -285,15 +292,11 @@ def update_query_result(object):
     cursor.execute(query)
     connection.commit()
 
+    # REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    select_query = create_query_based_on_user_permitions(
+        object_name, primary_key, "default")
 
-    #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
-    select_query = create_query_based_on_user_permitions(object_name, primary_key, "default")
-    
-    
-    return json.dumps( execQuery(select_query) )
-
-
-
+    return json.dumps(execQuery(select_query))
 
 
 @app.route("/delete/<object>", methods=['GET'])
@@ -320,7 +323,7 @@ def create_query_result(query):
     decoded_query = unquote(query)
 
     json_obj = json.loads(decoded_query)
-      # Extract the object name from the JSON object
+    # Extract the object name from the JSON object
     object_name = json_obj.get('object')
     del json_obj["object"]
 
@@ -334,18 +337,19 @@ def create_query_result(query):
         values.append(escape_sql_value(value))
     query = f"INSERT INTO {object_name} ({','.join(keys)}) VALUES ({','.join(values)})"
 
+    print(query)
     # Execute the SQL statement
     cursor.execute(query)
 
     # Commit the transaction and close the connection
     connection.commit()
 
-        #REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
-    select_query = create_query_based_on_user_permitions(object_name, primary_key, "default")
-    
-    
-    return json.dumps( execQuery(select_query) )
+    # REALLY IMPORTANT TO RETURN ONLY THE FIELDS THE USER HAS PERMITION TO
+    select_query = create_query_based_on_user_permitions(
+        object_name, primary_key, "default")
 
+    print(select_query)
+    return json.dumps(execQuery(select_query))
 
 
 @app.route("/createantigo/<entity>", methods=['GET', 'POST'])
