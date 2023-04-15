@@ -28,16 +28,15 @@ function Base(props) {
   return currentScreen;
 
   function changeRecord(targetObj, operation) {
-    targetObj.object = view.object;
 
     if (operation === "update") {
       console.log(`updating ${JSON.stringify(targetObj)}`)
-      editDataObj(`${viewUpdate}${encodeURIComponent(JSON.stringify(targetObj))}`)
+      editDataObj(viewUpdate,targetObj)
         
     }
     else if (operation === "delete") {
       console.log(`deleting ${JSON.stringify(targetObj)}`)
-      deleteDataObj(`${viewDelete}${encodeURIComponent(JSON.stringify(targetObj))}`)
+      deleteDataObj(viewDelete, targetObj)
         
     }
   }

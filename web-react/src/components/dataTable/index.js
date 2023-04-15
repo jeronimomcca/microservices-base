@@ -1,12 +1,11 @@
 import styles from './table.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
 import store from '../../stores/store';
 
 function Table({ onChangeData }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-  const [editRow, setEditRow] = useState(null);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
@@ -31,14 +30,11 @@ function Table({ onChangeData }) {
   const stringifyProp = (val) => {
     const objType = typeof val;
 
-
     switch (objType) {
       case "object":
         return JSON.stringify(val);
-        break;
       case "boolean":
         return val ? "true" : "false";
-        break;
       default:
         return String(val);
     }
@@ -92,7 +88,6 @@ function Table({ onChangeData }) {
 
   const handleEditClose = () => {
     setEditOpen(false);
-    setEditRow(null);
   };
 
   const handleEditSave = () => {

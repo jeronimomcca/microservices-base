@@ -1,9 +1,14 @@
 import { BASE_API_ROUTE } from '../settings'
 import store from '../stores/store';
 
-function App(obj) {
+function App(uri, obj) {
 
-  return fetch(BASE_API_ROUTE + obj)
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(obj)
+  };
+  return fetch(`${BASE_API_ROUTE}${uri}`, requestOptions)
     .then((response) => response.json())
     .then(addObjArray => {
       const addObj = addObjArray.data[0];

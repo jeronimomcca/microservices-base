@@ -63,13 +63,6 @@ def create_query_based_on_user_permitions(object_name, primary_key, user):
     return f"SELECT * from {object_name} WHERE id = {primary_key}"
 
 
-# def execQuery(query):
-#     cursor.execute(query)
-#     columns = [desc[0] for desc in cursor.description]
-#     result = [dict(zip(columns, row)) for row in cursor.fetchall()]
-#     return result
-
-
 def execQuery(query):
     cursor.execute(query)
     columns = [desc[0] for desc in cursor.description]
@@ -239,8 +232,8 @@ def get_web_app(query):
     # })
 
 
-@app.route("/get/<query>", methods=['GET'])
-def get_query_result(query):
+@app.route("/get/<object>/<query>", methods=['GET'])
+def get_query_result(object, query):
     # Decode and parse the query string
     try:
         json_obj = json.loads(unquote(query))
@@ -248,7 +241,7 @@ def get_query_result(query):
         return "Invalid JSON input"
 
     # Extract the properties from the JSON object
-    object_name = json_obj.get('object')
+    object_name = object
     filter_list = json_obj.get('filter', [])
     sort_criteria = json_obj.get('sort', '')
 
@@ -266,13 +259,11 @@ def get_query_result(query):
     return json.dumps(results)
 
 
-@app.route("/update/<object>", methods=['GET'])
+@app.route("/update/<object>/", methods=['POST'])
 def update_query_result(object):
-    print(object)
-    decoded_query = unquote(object)
-    update_data = json.loads(decoded_query)
-    object_name = update_data["object"]
-    del update_data["object"]
+    update_data = request.json
+    object_name = object
+
     primary_key = update_data["id"]
 
     # validate object_name
@@ -299,11 +290,10 @@ def update_query_result(object):
     return json.dumps(execQuery(select_query))
 
 
-@app.route("/delete/<object>", methods=['GET'])
+@app.route("/delete/<object>/", methods=['POST'])
 def delete_query_result(object):
-    decoded_query = unquote(object)
-    delete_data = json.loads(decoded_query)
-    object_name = delete_data["object"]
+    delete_data = request.json
+    object_name = object
     primary_key = delete_data["id"]
 
     # Build the SQL DELETE statement
@@ -315,17 +305,14 @@ def delete_query_result(object):
     return json.dumps(delete_data)
 
 
-@app.route("/create/<query>", methods=['GET'])
-def create_query_result(query):
+@app.route("/create/<object>/", methods=['POST'])
+def create_query_result(object):
     # need to convert URL-encoded string
     # curl -X GET http://localhost:10000/get/%7B%22name%22%3A%20%22John%22%2C%20%22age%22%3A%2030%7D
 
-    decoded_query = unquote(query)
-
-    json_obj = json.loads(decoded_query)
+    json_obj = request.json
     # Extract the object name from the JSON object
-    object_name = json_obj.get('object')
-    del json_obj["object"]
+    object_name = object
 
     primary_key = json_obj.get('id')
 

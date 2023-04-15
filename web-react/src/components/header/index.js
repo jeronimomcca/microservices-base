@@ -38,7 +38,7 @@ const App = observer(() => {
     if (currentViewObj) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
-      createObject(`${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`);
+      createObject(currentViewObj.create, createObj);
       handleCreateClose();
     }
   }
