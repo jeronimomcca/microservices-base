@@ -9,6 +9,26 @@
 # select * from firstSelect fsel left join entity ent on (ent.id = any(fsel.link) and ent."Descript" <> fsel."Descript")
 
 
+# Code	Meaning	Description
+# 200	OK	The requested action was successful.
+# 201	Created	A new resource was created.
+# 202	Accepted	The request was received, but no modification has been made yet.
+# 204	No Content	The request was successful, but the response has no content.
+# 400	Bad Request	The request was malformed.
+# 401	Unauthorized	The client is not authorized to perform the requested action.
+# 404	Not Found	The requested resource was not found.
+# 415	Unsupported Media Type	The request data format is not supported by the server.
+# 422	Unprocessable Entity	The request data was properly formatted but contained invalid or missing data.
+# 500	Internal Server Error	The server threw an error when processing the request.
+# These ten status codes represent only a small subset of the available HTTP status codes. Status codes are numbered based on the category of the result:
+
+# Code range	Category
+# 2xx	Successful operation
+# 3xx	Redirection
+# 4xx	Client error
+# 5xx	Server error
+
+
 import json
 import psycopg2
 from flask import Flask, request
@@ -117,6 +137,7 @@ def get_web_app(query):
 def get_query_result(object, query):
     # Decode and parse the query string
     try:
+        print(unquote(query))
         json_obj = json.loads(unquote(query))
     except json.JSONDecodeError:
         return "Invalid JSON input"
@@ -217,7 +238,7 @@ def create_query_result(object):
         object_name, primary_key, "default")
 
     print(select_query)
-    return json.dumps(execQuery(select_query))
+    return json.dumps(execQuery(select_query)), 201
 
 
 if __name__ == '__main__':
