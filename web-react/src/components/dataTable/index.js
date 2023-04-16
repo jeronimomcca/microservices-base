@@ -136,6 +136,7 @@ function Table({ onChangeData }) {
           <form>
             {selectedRow && Object.keys(selectedRow).map(key => (
               <TextField
+                disabled={key === "id" ? true : false}
                 key={key}
                 label={key}
                 value={stringifyProp(selectedRow[key])}
