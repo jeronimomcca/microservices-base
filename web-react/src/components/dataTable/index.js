@@ -1,11 +1,11 @@
 import styles from './table.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@material-ui/core';
+import store from '../../stores/store';
 
-function Table({ data, onChangeData, appProps }) {
+function Table({ onChangeData }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-  const [editRow, setEditRow] = useState(null);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
@@ -30,25 +30,24 @@ function Table({ data, onChangeData, appProps }) {
   const stringifyProp = (val) => {
     const objType = typeof val;
 
-
     switch (objType) {
       case "object":
         return JSON.stringify(val);
-        break;
       case "boolean":
         return val ? "true" : "false";
-        break;
       default:
         return String(val);
     }
 
   }
 
-  const filter = appProps.viewFilter;
+  const filter = store.appProps.viewFilter;
+  const data = store.appProps.viewData;
+  let filteredData = store.appProps.viewData;
+  const currentViewProps = store.appProps.currentViewProps;
 
-  let filteredData = data;
-  if( Object.values(filter).some((value) => value !== ''))
-    filteredData = appProps.viewFilterType ? data.filter((row) => {
+  if (Object.values(filter).some((value) => value !== ''))
+    filteredData = store.appProps.viewFilterType ? data.filter((row) => {
       const filterProps = Object.keys(filter);
 
       // If any filter property does not match the corresponding row property, exclude the row
@@ -58,18 +57,18 @@ function Table({ data, onChangeData, appProps }) {
         return rowPropValue.includes(filterPropValue);
       });
     }) :
-    data.filter((row) => {
-      const filterProps = Object.keys(filter);
+      data.filter((row) => {
+        const filterProps = Object.keys(filter);
 
-      // If any filter property match the corresponding row property
-      return filterProps.some(prop => {
-        const rowPropValue = stringifyProp(row[prop]).toLowerCase();
-        const filterPropValue = filter[prop].toLowerCase();
-        if(filterPropValue === "")
-          return false;
-        return rowPropValue.includes(filterPropValue);
-      });
-    })
+        // If any filter property match the corresponding row property
+        return filterProps.some(prop => {
+          const rowPropValue = stringifyProp(row[prop]).toLowerCase();
+          const filterPropValue = filter[prop].toLowerCase();
+          if (filterPropValue === "")
+            return false;
+          return rowPropValue.includes(filterPropValue);
+        });
+      })
 
   const sortedData = filteredData.slice().sort((a, b) => {
     if (sortColumn !== null) {
@@ -89,7 +88,6 @@ function Table({ data, onChangeData, appProps }) {
 
   const handleEditClose = () => {
     setEditOpen(false);
-    setEditRow(null);
   };
 
   const handleEditSave = () => {
@@ -110,21 +108,24 @@ function Table({ data, onChangeData, appProps }) {
       <table className={styles.table}>
         <thead>
           <tr>
-            {Object.keys(data[0]).map(key => (
-              <th key={key} onClick={() => handleHeaderClick(key)}>
-                {key}
-                {sortColumn === key &&
-                  (sortDirection === 'asc' ? ' ▲' : ' ▼')}
-              </th>
-            ))}
+            {Object.values(currentViewProps).map(key => {
+              if (key !== "id")
+                return <th key={key} onClick={() => handleHeaderClick(key)}>
+                  {key}
+                  {sortColumn === key &&
+                    (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+                </th>
+            })}
           </tr>
         </thead>
         <tbody>
           {sortedData.map(row => (
             <tr key={row.id} onClick={(event) => handleClickRow(event, row)}>
-              {Object.values(row).map((value, i) => (
-                <td key={i}>{stringifyProp(value)}</td>
-              ))}
+              {Object.entries(row).map(([key, value], i) => {
+                if (key !== "id")
+                  return <td key={i}>{stringifyProp(value)}</td>
+              }
+              )}
             </tr>
           ))}
         </tbody>
@@ -135,6 +136,7 @@ function Table({ data, onChangeData, appProps }) {
           <form>
             {selectedRow && Object.keys(selectedRow).map(key => (
               <TextField
+                disabled={key === "id" ? true : false}
                 key={key}
                 label={key}
                 value={stringifyProp(selectedRow[key])}

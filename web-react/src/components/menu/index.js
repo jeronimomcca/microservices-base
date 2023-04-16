@@ -4,18 +4,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { Menu as MnIcon } from '@material-ui/icons';
 import './styles.css';
+import store from '../../stores/store';
 
 const ITEM_HEIGHT = 48;
 
 export default function SimpleMenu(props) {
 
-
-  let configuration = props.configuration;
-  let onChangeAppProps = props.onChangeAppProps;
-  let appProps = props.appProps;
-  let currentView = appProps.currentView
-
-  const options = configuration ? configuration.views : []
+  const options = store.configuration.views ? store.configuration.views : []
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,10 +21,9 @@ export default function SimpleMenu(props) {
 
   const handleChoose = (event) => {
     const view = event.currentTarget.getAttribute("id");
-
-    if (view && currentView !== view)
-      onChangeAppProps({ ...appProps, currentView: view, viewFilter: {} })
-    handleClose()
+    if (view && store.appProps.currentView !== view)
+      store.setAppProps({ currentView: view, viewFilter: {} });
+    handleClose();
   };
 
   const handleClose = () => {

@@ -1,17 +1,24 @@
 import { useEffect, useState } from 'react';
 import { BASE_API_ROUTE, CONFIG_URL, FETCH_CONFIG_RETRY_TIMEOUT  } from '../settings'
+import store from '../stores/store';
+
 
 function App() {
 
-  const [response, setResponse] = useState(null);
+  const appProps = store.appProps;
   let [hasRequest] = useState(false);
+ let [hasResponse, setHasResponse] = useState(false);
 
   const scheduleApiCall = () => {
     fetch(BASE_API_ROUTE + CONFIG_URL)
       .then(response => response.json())
-      .then(data => setResponse(data))
+      .then((data) => {
+        store.setConfiguration(data);
+        store.setAppProps({ currentView: data.views[0].name });
+        setHasResponse(true);
+      }) 
       .catch((error) => {
-        setResponse(error);
+        console.log(`==========Error fetching configuration: ${JSON.stringify(error)}`)
         setTimeout(() => scheduleApiCall() , [FETCH_CONFIG_RETRY_TIMEOUT])
       });
 
@@ -25,7 +32,9 @@ function App() {
     }
   }, []);
 
-  return response;
+return hasResponse;
 }
 
 export default App;
+
+

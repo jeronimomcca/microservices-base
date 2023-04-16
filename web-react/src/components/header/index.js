@@ -6,15 +6,14 @@ import AddIcon from '@material-ui/icons/Add';
 import { Search } from '@material-ui/icons';
 import createObject from '../../hooks/createObject';
 import { DEFAULT_FILTER_TYPE } from '../../settings';
+import store from '../../stores/store';
+import { observer } from 'mobx-react-lite';
 
-function App(props) {
-  let configuration = props.configuration;
-  let onChangeAppProps = props.onChangeAppProps;
-  let appProps = props.appProps;
-  const filterObj = appProps.viewFilter;
+const App = observer(() => {
 
+  const filterObj =  store.appProps.viewFilter;
   const setFilterObj = (val) => {
-    onChangeAppProps({ ...appProps, viewFilter: val });
+    store.setAppProps({ viewFilter: val });
   }
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -22,32 +21,24 @@ function App(props) {
   const [createObj, setCreateObj] = useState({});
 
   const updateFilterType = () => {
-    onChangeAppProps({ ...appProps, viewFilterType: !appProps.viewFilterType });
+    store.setAppProps({ viewFilterType: !store.appProps.viewFilterType });
   }
 
   let [currentViewObj, setCurrentViewObj] = useState(undefined);
-  let currentView = appProps.currentView;
+
 
   useEffect(() => {
-    if (configuration) {
-      setCurrentViewObj(configuration.views.find((view) => view.name === currentView));
+    if (store.configuration.views) {
+      setCurrentViewObj(store.configuration.views.find((view) => view.name === store.appProps.currentView));
       loadFilterProps();
     }
-  }, [appProps.currentView, configuration, currentView])
+  }, [store.appProps.currentView, store.configuration])
 
   const callCreateForm = () => {
     if (currentViewObj) {
       setCreateOpen(true)
       console.log(JSON.stringify(createObj))
-      createObject(`${currentViewObj.create}${encodeURIComponent(JSON.stringify({ ...createObj, object: currentViewObj.object }))}`)
-        .then(addObjArray => {
-          const addObj = addObjArray[0];
-          console.log(JSON.stringify(addObj));
-          let aux = appProps.viewData.slice();
-          console.log(JSON.stringify(aux));
-          onChangeAppProps({ ...appProps, viewData: [...aux, addObj] });
-        })
-        .catch(error => console.log(error));
+      createObject(currentViewObj.create, createObj);
       handleCreateClose();
     }
   }
@@ -62,16 +53,13 @@ function App(props) {
   };
 
   const callFilterForm = () => {
-    if (currentViewObj) {
-      console.log(JSON.stringify(filterObj))
-
+    if (currentViewObj)
       handleFilterClose();
-    }
   }
 
   const loadFilterProps = () => {
-    if (appProps.currentViewProps) {
-      let filterObjRed = appProps.currentViewProps.reduce((acc, curr) => {
+    if (store.appProps.currentViewProps) {
+      let filterObjRed = store.appProps.currentViewProps.reduce((acc, curr) => {
         acc[curr] = "";
         return acc;
       }, {});
@@ -83,9 +71,7 @@ function App(props) {
 
   const handleFilterOpen = () => {
     setFilterOpen(true);
-    console.log(`---------${JSON.stringify(filterObj)}`)
-    console.log(`---------${JSON.stringify(appProps.currentViewProps)}`)
-    if (Object.keys(filterObj).length != Object.keys(appProps.currentViewProps).length)
+    if (Object.keys(filterObj).length != Object.keys(store.appProps.currentViewProps).length)
       loadFilterProps();
   };
 
@@ -96,8 +82,8 @@ function App(props) {
   const handleClearFilterClose = () => {
     setFilterOpen(false);
     loadFilterProps();
-    if (appProps.viewFilterType != DEFAULT_FILTER_TYPE)
-      onChangeAppProps({ ...appProps, viewFilterType: DEFAULT_FILTER_TYPE });
+    if (store.appProps.viewFilterType != DEFAULT_FILTER_TYPE)
+      store.setAppProps({ viewFilterType: DEFAULT_FILTER_TYPE });
   };
 
   return (
@@ -107,10 +93,10 @@ function App(props) {
         <tbody>
           <tr>
             <td className='Header-menu'>
-              <Menu configuration={configuration} appProps={appProps} onChangeAppProps={onChangeAppProps} />
+              <Menu />
             </td>
             <td className='Header-view'>
-              {currentView}
+              {store.appProps.currentView}
             </td>
             <td className='Header-menu'>
               <Button onClick={handleCreateOpen}
@@ -133,12 +119,12 @@ function App(props) {
         <DialogTitle>Create</DialogTitle>
         <DialogContent>
           <form>
-            {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
+            {store.appProps && store.appProps.currentViewProps && Object.keys(store.appProps.currentViewProps).map((key, val) => (
               <TextField
-                key={appProps.currentViewProps[key]}
-                label={appProps.currentViewProps[key]}
+                key={store.appProps.currentViewProps[key]}
+                label={store.appProps.currentViewProps[key]}
                 value={createObj[val]}
-                onChange={(event) => setCreateObj({ ...createObj, [appProps.currentViewProps[key]]: event.target.value })}
+                onChange={(event) => setCreateObj({ ...createObj, [store.appProps.currentViewProps[key]]: event.target.value })}
                 fullWidth
               />
             ))}
@@ -152,19 +138,19 @@ function App(props) {
       <Dialog open={filterOpen} onClose={handleFilterClose}>
         <DialogTitle> <div> <p> Filter </p>
           <Switch
-            checked={appProps.viewFilterType}
+            checked={store.appProps.viewFilterType}
             onChange={updateFilterType}
-            color='blue'
+            color='primary'
           />
-          {appProps.viewFilterType ? "AND" : "OR"} </div> </DialogTitle>
+          {store.appProps.viewFilterType ? "AND" : "OR"} </div> </DialogTitle>
         <DialogContent>
           <form>
-            {appProps && appProps.currentViewProps && Object.keys(appProps.currentViewProps).map((key, val) => (
+            {store.appProps && store.appProps.currentViewProps && Object.keys(store.appProps.currentViewProps).map((key, val) => (
               <TextField
-                key={appProps.currentViewProps[key]}
-                label={appProps.currentViewProps[key]}
-                value={filterObj[appProps.currentViewProps[key].toString()]}
-                onChange={(event) => setFilterObj({ ...filterObj, [appProps.currentViewProps[key]]: event.target.value })}
+                key={store.appProps.currentViewProps[key]}
+                label={store.appProps.currentViewProps[key]}
+                value={filterObj[store.appProps.currentViewProps[key].toString()]}
+                onChange={(event) => setFilterObj({ ...filterObj, [store.appProps.currentViewProps[key]]: event.target.value })}
                 fullWidth
               />
             ))}
@@ -179,6 +165,6 @@ function App(props) {
     </header>
 
   );
-}
+})
 
 export default App;
