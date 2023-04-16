@@ -40,13 +40,13 @@ function Table({ onChangeData }) {
     }
 
   }
-
+  
   const filter = store.appProps.viewFilter;
   const data = store.appProps.viewData;
   let filteredData = store.appProps.viewData;
   const currentViewProps = store.appProps.currentViewProps;
 
-  if (Object.values(filter).some((value) => value !== ''))
+  if( Object.values(filter).some((value) => value !== ''))
     filteredData = store.appProps.viewFilterType ? data.filter((row) => {
       const filterProps = Object.keys(filter);
 
@@ -57,18 +57,18 @@ function Table({ onChangeData }) {
         return rowPropValue.includes(filterPropValue);
       });
     }) :
-      data.filter((row) => {
-        const filterProps = Object.keys(filter);
+    data.filter((row) => {
+      const filterProps = Object.keys(filter);
 
-        // If any filter property match the corresponding row property
-        return filterProps.some(prop => {
-          const rowPropValue = stringifyProp(row[prop]).toLowerCase();
-          const filterPropValue = filter[prop].toLowerCase();
-          if (filterPropValue === "")
-            return false;
-          return rowPropValue.includes(filterPropValue);
-        });
-      })
+      // If any filter property match the corresponding row property
+      return filterProps.some(prop => {
+        const rowPropValue = stringifyProp(row[prop]).toLowerCase();
+        const filterPropValue = filter[prop].toLowerCase();
+        if(filterPropValue === "")
+          return false;
+        return rowPropValue.includes(filterPropValue);
+      });
+    })
 
   const sortedData = filteredData.slice().sort((a, b) => {
     if (sortColumn !== null) {
@@ -108,24 +108,21 @@ function Table({ onChangeData }) {
       <table className={styles.table}>
         <thead>
           <tr>
-            {Object.values(currentViewProps).map(key => {
-              if (key !== "id")
-                return <th key={key} onClick={() => handleHeaderClick(key)}>
-                  {key}
-                  {sortColumn === key &&
-                    (sortDirection === 'asc' ? ' ▲' : ' ▼')}
-                </th>
-            })}
+            {Object.values(currentViewProps).map(key => (
+              <th key={key} onClick={() => handleHeaderClick(key)}>
+                {key}
+                {sortColumn === key &&
+                  (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {sortedData.map(row => (
             <tr key={row.id} onClick={(event) => handleClickRow(event, row)}>
-              {Object.entries(row).map(([key, value], i) => {
-                if (key !== "id")
-                  return <td key={i}>{stringifyProp(value)}</td>
-              }
-              )}
+              {Object.values(row).map((value, i) => (
+                <td key={i}>{stringifyProp(value)}</td>
+              ))}
             </tr>
           ))}
         </tbody>
