@@ -206,6 +206,14 @@ def delete_query_result(object):
     connection.commit()
     return json.dumps(delete_data)
 
+def get_seq_value( seq_name ):
+    # Execute the query to get the next value of the sequence
+    cursor.execute(f"SELECT nextval('{seq_name}')")
+
+    # Get the result
+    next_val = cursor.fetchone()[0]
+    return next_val
+
 
 @app.route("/create/<object>/", methods=['POST'])
 def create_query_result(object):
@@ -217,6 +225,11 @@ def create_query_result(object):
     object_name = object
 
     primary_key = json_obj.get('id')
+
+    if( not primary_key ):
+       primary_key = get_seq_value( f"{object_name}_id_seq" )
+       json_obj['id'] = primary_key
+    
 
     # Build the SQL statement to insert a new row
     keys = []
