@@ -12,7 +12,7 @@ This should have a dynamic way to load data from the web API and mount generic v
 
 
 Roadmap:
-0. Create a store to manage states
-1. Create a login view
-2. make main menu able to group views by categories
-3. 
+0. Add event support using mosquitto
+1. If one abject prop has other object, make they appear on the list when editing
+2. Create a login view
+3. make main menu able to group views by categories
