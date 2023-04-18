@@ -40,7 +40,7 @@ CORS(app)
 
 connection = psycopg2.connect(user="jmc",
                               password="jmc",
-                              host="127.0.0.1",
+                              host="db_server",
                               port="5432",
                               database="links")
 
