@@ -16,3 +16,4 @@ Roadmap:
 1. If one abject prop has other object, make they appear on the list when editing
 2. Create a login view
 3. make main menu able to group views by categories
+4. create user documentation on how to create a database able to be used for the base app. 
